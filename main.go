@@ -27,7 +27,7 @@ func main() {
 		schedule string
 		keywords string
 	)
-	flag.StringVar(&schedule, "schedule", "* * * * *", "Crontab-ilke schedule string")
+	flag.StringVar(&schedule, "schedule", "* * * * *", "A crontab-like syntax schedule")
 	flag.StringVar(&keywords, "keywords", "", "Keyword to search for image")
 	flag.Parse()
 	ctab := crontab.New()
