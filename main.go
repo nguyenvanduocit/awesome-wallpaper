@@ -9,9 +9,11 @@ import (
 	"time"
 )
 
+const baseURL = "https://source.unsplash.com/random"
+
 func changeWallpaper(keywords string) {
 	sig := time.Now().Unix()
-	url := fmt.Sprintf("https://source.unsplash.com/random?sig=%d", sig)
+	url := fmt.Sprintf("%s?sig=%d", baseURL, sig)
 	if keywords != "" {
 		url = fmt.Sprintf("%s&%s", url, keywords)
 	}
@@ -31,5 +33,6 @@ func main() {
 	ctab := crontab.New()
 	ctab.MustAddJob(schedule, changeWallpaper, keywords)
 	ctab.RunAll()
+	fmt.Println("Running...")
 	select {}
 }
