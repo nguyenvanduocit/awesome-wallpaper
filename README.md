@@ -14,6 +14,7 @@ go get github.com/nguyenvanduocit/awesome-wallpaper
 |------------|-----------|--------|-------------|
 | --schedule | * * * * * | String | Optional. Crontab-like syntax schedule |
 | --keywords | (empty)   | String | Optional. Keywords to search, separated by commas|
+| --conf     | (empty)   | String | Optional. Path to config file |
 
 ## Example 
 
@@ -39,6 +40,46 @@ or
 
 ```
 awesome-wallpaper --keyword=cat,monster
+```
+
+## Config file
+
+With config file, you can config more than one schedule, for example:
+
+```
+[
+  {
+    "description": "Display cat for morning",
+    "schedule": "* 6-9 * * *",
+    "keywords": "cat"
+  },
+  {
+    "description": "Display foods for noon",
+    "schedule": "* 10-11 * * *",
+    "keywords": "food"
+  },
+  {
+    "description": "Display tech stuff on afternoon",
+    "schedule": "* 12-15 * * *",
+    "keywords": "tech"
+  },
+  {
+    "description": "Display family on the evening",
+    "schedule": "* 16-20 * * *",
+    "keywords": "family,kid,home"
+  },
+  {
+    "description": "Display galaxy for night",
+    "schedule": "* 21-23 * * *",
+    "keywords": "galaxy,universe,night"
+  }
+]
+```
+
+Then run 
+
+```
+awesome-wallpaper --config=config.json
 ```
 
 ## Crontab syntax
