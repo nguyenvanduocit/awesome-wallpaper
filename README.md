@@ -10,12 +10,12 @@ go get github.com/nguyenvanduocit/awesome-wallpaper
 
 ## Arguments
 
-| Arguments | Default | Description |
-|----------|-------------|---|
-| --schedule | * * * * * | Optional. Crontab-like syntax schedule |
-| --keywords | (empty) | Optional. Keywords to search, separated by commas|
+| Arguments  | Default   | Type   | Description |
+|------------|-----------|--------|-------------|
+| --schedule | * * * * * | String | Optional. Crontab-like syntax schedule |
+| --keywords | (empty)   | String | Optional. Keywords to search, separated by commas|
 
-## Example
+## Example 
 
 Set random wallpaper every minute:
 
@@ -26,13 +26,13 @@ awesome-wallpaper
 Set random wallpaper at 7:00 AM every day:
 
 ```
-awesome-wallpaper --schedule=0 7 * * *
+awesome-wallpaper --schedule="0 7 * * *"
 ```
 
 With keywords:
 
 ```
-awesome-wallpaper --schedule=0 7 * * * --keyword=cat,monster
+awesome-wallpaper --schedule="0 7 * * *" --keyword=cat,monster
 ```
 
 or

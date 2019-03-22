@@ -1,0 +1,27 @@
+[
+  {
+    "description": "Display cat for morning",
+    "schedule": "* 6-9 * * *",
+    "keywords": "cat"
+  },
+  {
+    "description": "Display foods for noon",
+    "schedule": "* 10-11 * * *",
+    "keywords": "food"
+  },
+  {
+    "description": "Display tech stuff on afternoon",
+    "schedule": "* 12-15 * * *",
+    "keywords": "tech"
+  },
+  {
+    "description": "Display family on the evening",
+    "schedule": "* 16-20 * * *",
+    "keywords": "family,kid,home"
+  },
+  {
+    "description": "Display galaxy for night",
+    "schedule": "* 21-23 * * *",
+    "keywords": "galaxy,universe,night"
+  }
+]
