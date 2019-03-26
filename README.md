@@ -15,6 +15,7 @@ go get github.com/nguyenvanduocit/awesome-wallpaper
 | --schedule | * * * * * | String | Optional. Crontab-like syntax schedule |
 | --keywords | (empty)   | String | Optional. Keywords to search, separated by commas|
 | --conf     | (empty)   | String | Optional. Path to config file |
+| --service  | (empty)   | String | Optional. Service action: install, start, stop, remove, status |
 
 ## Example 
 
@@ -81,6 +82,33 @@ Then run
 ```
 awesome-wallpaper --config=config.json
 ```
+
+## Run as a service
+
+Install service:
+
+```
+awesome-wallpaper --config="./config.json" --service="install"
+```
+
+Start service:
+
+```
+awesome-wallpaper --service="start"
+```
+
+Stop service:
+
+```
+awesome-wallpaper --service="stop"
+```
+
+Remove service:
+
+```
+awesome-wallpaper --service="remove"
+```
+
 
 ## Crontab syntax
 
