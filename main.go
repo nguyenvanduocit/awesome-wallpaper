@@ -190,7 +190,6 @@ func changeWallpaper(schedule Schedule) error {
 		log.Println(err)
 		return err
 	}
-	log.Printf("Background was changed to %s\n", imagePath)
 	return nil
 }
 
