@@ -159,14 +159,13 @@ func main() {
 	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
 
 	log.Println("Running...")
-	select {
-	case killSignal := <-interrupt:
-		log.Println("Got signal:", killSignal)
-		if killSignal == os.Interrupt {
-			log.Println("Daemon was interruped by system signal")
-		}
-		log.Println("Daemon was killed")
+
+	killSignal := <-interrupt
+	log.Println("Got signal:", killSignal)
+	if killSignal == os.Interrupt {
+		log.Println("Interruped by system signal ")
 	}
+	log.Println("Bye...")
 }
 
 func changeWallpaper(schedule Schedule) error {
@@ -239,8 +238,11 @@ func openTempFile() (*os.File, error) {
 }
 
 func ensureCacheFile() (string, error) {
-	_, caller, _, _ := runtime.Caller(1)
-	dir := path.Dir(caller)
+	ex, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	dir := filepath.Dir(ex)
 	files, err := filepath.Glob(fmt.Sprintf("%s/background-*.jpg", dir))
 	if err != nil {
 		return "", err
@@ -250,6 +252,6 @@ func ensureCacheFile() (string, error) {
 			return "", err
 		}
 	}
-	filename := fmt.Sprintf("%s/background-%d.jpg", path.Dir(caller), time.Now().Unix())
+	filename := fmt.Sprintf("%s/background-%d.jpg", dir, time.Now().Unix())
 	return filename, nil
 }
