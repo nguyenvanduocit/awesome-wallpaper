@@ -70,6 +70,48 @@ func main() {
 		os.Exit(0)
 	}
 
+	handleServiceAction()
+	setupLogger()
+
+	var schedules []Schedule
+	if configFilePath != "" {
+		var err error
+		if schedules, err = parseScheduleConfig(configFilePath); err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		schedules = []Schedule{
+			{
+				Schedule: schedule,
+				Keywords: keywords,
+			},
+		}
+	}
+
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Schedule", "Keyword", "Description"})
+
+	ctab := crontab.New()
+	for _, job := range schedules {
+		ctab.MustAddJob(job.Schedule, changeWallpaper, job)
+		table.Append([]string{job.Schedule, job.Keywords, job.Description})
+	}
+	table.Render()
+
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
+
+	log.Println("Running...")
+
+	killSignal := <-interrupt
+	log.Println("Got signal:", killSignal)
+	if killSignal == os.Interrupt {
+		log.Println("Interruped by system signal ")
+	}
+	log.Println("Bye...")
+}
+
+func handleServiceAction() {
 	if serviceAction != "" {
 		srv, err := daemon.New(name, description)
 		if err != nil {
@@ -127,45 +169,6 @@ func main() {
 			os.Exit(0)
 		}
 	}
-
-	setupLogger()
-
-	var schedules []Schedule
-	if configFilePath != "" {
-		var err error
-		if schedules, err = parseScheduleConfig(configFilePath); err != nil {
-			log.Fatalln(err)
-		}
-	} else {
-		schedules = []Schedule{
-			{
-				Schedule: schedule,
-				Keywords: keywords,
-			},
-		}
-	}
-
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Schedule", "Keyword", "Description"})
-
-	ctab := crontab.New()
-	for _, job := range schedules {
-		ctab.MustAddJob(job.Schedule, changeWallpaper, job)
-		table.Append([]string{job.Schedule, job.Keywords, job.Description})
-	}
-	table.Render()
-
-	interrupt := make(chan os.Signal, 1)
-	signal.Notify(interrupt, os.Interrupt, os.Kill, syscall.SIGTERM)
-
-	log.Println("Running...")
-
-	killSignal := <-interrupt
-	log.Println("Got signal:", killSignal)
-	if killSignal == os.Interrupt {
-		log.Println("Interruped by system signal ")
-	}
-	log.Println("Bye...")
 }
 
 func changeWallpaper(schedule Schedule) error {
