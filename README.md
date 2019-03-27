@@ -19,7 +19,7 @@ go get github.com/nguyenvanduocit/awesome-wallpaper
 
 ## Example 
 
-Set random wallpaper every minute:
+Set random wallpaper at every 30th minute:
 
 ```
 awesome-wallpaper
