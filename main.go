@@ -12,7 +12,6 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"log/syslog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -49,7 +48,6 @@ var (
 	showVersion    bool
 	showHelp       bool
 	isDeamon       bool
-	logwriter      *io.Writer
 )
 
 func main() {
@@ -130,11 +128,7 @@ func main() {
 		}
 	}
 
-	if isDeamon {
-		if logwriter, err := syslog.New(syslog.LOG_NOTICE, name); err == nil {
-			log.SetOutput(logwriter)
-		}
-	}
+	setupLogger()
 
 	var schedules []Schedule
 	if configFilePath != "" {
