@@ -29,6 +29,7 @@ const version = "1.0.0"
 type Service struct {
 	daemon.Daemon
 }
+
 type Schedule struct {
 	Description string `json:"description,omitempty"`
 	Schedule    string `json:"schedule,omitempty"`
@@ -40,17 +41,17 @@ var (
 	description = "awesome-wallpaper"
 )
 
-var (
-	schedule       string
-	keywords       string
-	configFilePath string
-	serviceAction  string
-	showVersion    bool
-	showHelp       bool
-	isDeamon       bool
-)
-
 func main() {
+	var (
+		schedule       string
+		keywords       string
+		configFilePath string
+		serviceAction  string
+		showVersion    bool
+		showHelp       bool
+		isDeamon       bool
+	)
+
 	flag.BoolVar(&showVersion, "version", false, fmt.Sprintf("Current version: %s", version))
 	flag.BoolVar(&showHelp, "help", false, "View help message")
 	flag.StringVar(&schedule, "schedule", "30 * * * *", "(optional) A crontab-like syntax schedule")
@@ -70,8 +71,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	handleServiceAction()
-	setupLogger()
+	handleServiceAction(serviceAction)
+	setupLogger(isDeamon)
 
 	var schedules []Schedule
 	if configFilePath != "" {
@@ -111,7 +112,7 @@ func main() {
 	log.Println("Bye...")
 }
 
-func handleServiceAction() {
+func handleServiceAction(serviceAction string) {
 	if serviceAction != "" {
 		srv, err := daemon.New(name, description)
 		if err != nil {
@@ -119,55 +120,36 @@ func handleServiceAction() {
 			os.Exit(1)
 		}
 		service := &Service{srv}
+		var status string
+
 		switch serviceAction {
 		case "install":
 			args := []string{
 				"--deamon",
 			}
 			for _, arg := range os.Args[1:] {
-				if strings.Index(arg, "--service=") != 0 {
+				if strings.Index(arg, "--service=") == -1 {
 					args = append(args, arg)
 				}
 			}
-			status, err := service.Install(args...)
-			if err != nil {
-				log.Fatalln(err)
-			}
-			log.Println(status)
-			log.Println(args)
-			os.Exit(0)
+			status, err = service.Install(args...)
 		case "remove":
-			status, err := service.Remove()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			log.Println(status)
-			os.Exit(0)
+			status, err = service.Remove()
 		case "start":
-			status, err := service.Start()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			log.Println(status)
-			os.Exit(0)
+			status, err = service.Start()
 		case "stop":
-			status, err := service.Stop()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			log.Println(status)
-			os.Exit(0)
+			status, err = service.Stop()
 		case "status":
-			status, err := service.Status()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			log.Println(status)
-			os.Exit(0)
+			status, err = service.Status()
 		default:
-			log.Println("Usage: awesome-wallpaper service install | remove | start | stop | status")
+			status = "Usage: awesome-wallpaper service install | remove | start | stop | status"
 			os.Exit(0)
 		}
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println(status)
+		os.Exit(0)
 	}
 }
 

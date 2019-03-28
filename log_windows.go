@@ -1,3 +1,3 @@
 package main
 
-func setupLogger() {}
+func setupLogger(isDeamon bool) {}
